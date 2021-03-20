@@ -1,3 +1,4 @@
 .idea/
 
 1-infrastructure/.terraform
+2-platform/.terraform

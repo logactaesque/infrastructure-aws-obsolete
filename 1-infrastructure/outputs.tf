@@ -13,3 +13,15 @@ output "public-subnet-id" {
 output "private-subnet-id" {
   value = aws_subnet.private-subnet.id
 }
+
+output "public_subnets" {
+  value = [
+    aws_subnet.public-subnet.id,
+  ]
+}
+
+output "private_subnets" {
+  value = [
+    aws_subnet.private-subnet.id,
+  ]
+}
