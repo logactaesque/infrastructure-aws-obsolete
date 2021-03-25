@@ -1,4 +1,7 @@
 .idea/
 
 1-infrastructure/.terraform
+1-infrastructure/.terraform.lock.hcl
+
 2-platform/.terraform
+2-platform/.terraform.lock.hcl

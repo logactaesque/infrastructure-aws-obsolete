@@ -7,19 +7,19 @@ output "vpc_cidr_block" {
 }
 
 output "ecs_alb_listener_arn" {
-  value = aws_alb_listener.logactaesque-dev-ecs-alb-https-listener.arn
+  value = aws_alb_listener.ecs_alb_https_listener.arn
 }
 
 output "ecs_cluster_name" {
-  value = aws_ecs_cluster.logactaesque-dev-ecs-cluster.name
+  value = aws_ecs_cluster.logactaesque-ecs-cluster.name
 }
 
 output "ecs_cluster_role_name" {
-  value = aws_iam_role.logactaesque-dev-ecs-cluster_role.name
+  value = aws_iam_role.ecs_cluster_role.name
 }
 
 output "ecs_cluster_role_arn" {
-  value = aws_iam_role.logactaesque-dev-ecs-cluster_role.arn
+  value = aws_iam_role.ecs_cluster_role.arn
 }
 
 output "ecs_domain_name" {

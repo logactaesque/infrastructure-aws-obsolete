@@ -6,7 +6,7 @@ Provision supporting infrastructure AWS for Logactaesque using [Terraform](https
 - The AWS [CLI](https://aws.amazon.com/cli/) tool 
 - An AWS IAM account with relevant privileges to construct AWS infrastructural components.
 - AWS Access and Secret Key configured locally (e.g. for Linux, this would sit under `~/.aws`)
-- Terraform (this work used version **v0.12.26**)
+- Terraform (this work used version **v0.14.8**)
 - An AWS S3 bucket to hold terraform state (presently *logactaesque-terraform-state-development*)
 
 ## Project Structure (Work-in Progress)

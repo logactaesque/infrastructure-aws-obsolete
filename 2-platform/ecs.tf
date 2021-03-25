@@ -17,19 +17,26 @@ data "terraform_remote_state" "infrastructure" {
   }
 }
 
-resource "aws_ecs_cluster" "logactaesque-dev-ecs-cluster" {
-  name = "Logactaesque Development ECS Cluster"
+resource "aws_ecs_cluster" "logactaesque-ecs-cluster" {
+  name = "logactaesque-ecs-cluster"
 }
 
-resource aws_alb "logactaesque-dev-ecs-cluster-alb" {
+resource "aws_alb" "ecs_cluster_alb" {
   name            = "${var.ecs_cluster_name}-ALB"
   internal        = false
   security_groups = [aws_security_group.ecs-alb-security-group.id]
-  subnets = split(",", join(",", data.terraform_remote_state.infrastructure.outputs.public_subnets,),)
+  subnets = split(",",
+      join(",", data.terraform_remote_state.infrastructure.outputs.public_subnets,
+    ),
+  )
+
+  tags = {
+    Name = "${var.ecs_cluster_name}-ALB"
+  }
 }
 
-resource aws_alb_listener "logactaesque-dev-ecs-alb-https-listener" {
-  load_balancer_arn = aws_alb.logactaesque-dev-ecs-cluster-alb.arn
+resource "aws_alb_listener" "ecs_alb_https_listener" {
+  load_balancer_arn = aws_alb.ecs_cluster_alb.arn
   port              = 443
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-TLS-1-2-2017-01"
@@ -37,33 +44,36 @@ resource aws_alb_listener "logactaesque-dev-ecs-alb-https-listener" {
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_alb_target_group.logactaesque-dev-ecs-default-target-group.arn
+    target_group_arn = aws_alb_target_group.ecs_default_target_group.arn
   }
 
-  depends_on = [aws_alb_target_group.logactaesque-dev-ecs-default-target-group]
+  depends_on = [aws_alb_target_group.ecs_default_target_group]
 }
 
-resource "aws_alb_target_group" "logactaesque-dev-ecs-default-target-group" {
+resource "aws_alb_target_group" "ecs_default_target_group" {
   name     = "${var.ecs_cluster_name}-TG"
   port     = 80
   protocol = "HTTP"
   vpc_id   = data.terraform_remote_state.infrastructure.outputs.vpc_id
+
+  tags = {
+    Name = "${var.ecs_cluster_name}-TG"
+  }
 }
 
-resource "aws_route53_record" "logactaesque-dev-ecs-cluster-alb-record" {
+resource "aws_route53_record" "ecs_load_balancer_record" {
   name    = "*.${var.logactaesque-domain-name}"
   type    = "A"
   zone_id = data.aws_route53_zone.logactaesque_domain_zone.zone_id
 
   alias {
     evaluate_target_health = false
-    name                   = aws_alb.logactaesque-dev-ecs-cluster-alb.dns_name
-    zone_id                = aws_alb.logactaesque-dev-ecs-cluster-alb.zone_id
+    name                   = aws_alb.ecs_cluster_alb.dns_name
+    zone_id                = aws_alb.ecs_cluster_alb.zone_id
   }
 }
 
-
-resource "aws_iam_role" "logactaesque-dev-ecs-cluster_role" {
+resource "aws_iam_role" "ecs_cluster_role" {
   name               = "${var.ecs_cluster_name}-IAM-Role"
   assume_role_policy = <<EOF
 {
@@ -82,9 +92,9 @@ EOF
 
 }
 
-resource "aws_iam_role_policy" "logactaesque-dev-ecs-cluster_policy" {
-  name = "${var.ecs_cluster_name}-IAM-Policy"
-  role = aws_iam_role.logactaesque-dev-ecs-cluster_role.id
+resource "aws_iam_role_policy" "ecs_cluster_policy" {
+  name   = "${var.ecs_cluster_name}-IAM-Policy"
+  role   = aws_iam_role.ecs_cluster_role.id
   policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -110,4 +120,6 @@ resource "aws_iam_role_policy" "logactaesque-dev-ecs-cluster_policy" {
   ]
 }
 EOF
+
 }
+
