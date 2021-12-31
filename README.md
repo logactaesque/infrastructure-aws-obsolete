@@ -1,5 +1,9 @@
 # Infrastructure AWS
-Provision supporting infrastructure AWS for Logactaesque using [Terraform](https://www.terraform.io/)
+Experimental attempt at provisioning the supporting infrastructure in AWS for Logactaesque using [Terraform](https://www.terraform.io/)
+
+_**As of December 2021 this has been paused in an incomplete state.** Parts 1 and 2 function as expected.
+
+Built using [this Udemy course](https://www.udemy.com/course/deploy-fargate-ecs-apps-infrastructure-aws-with-terraform/) on Fargate/AWS/Terraform
 
 ## Prerequisites
 - An [AWS](https://aws.amazon.com/) account
@@ -13,7 +17,7 @@ Provision supporting infrastructure AWS for Logactaesque using [Terraform](https
 The project comprises three folders:
 1. Supporting infrastructure
 2. Platform 
-3. TBC
+3. Application
 
 ### 1-infrastructure 
 This builds what is a development environment inside region eu-west-1 comprising
@@ -44,12 +48,17 @@ To see and subsequently teardown changes:
     terraform destroy -var-file="development.tfvars"
 
 ### 2-platform 
-Supporting commands to build the platform should be run from the project folder *2-platform*)
+Supporting commands to build the platform should be run from the project folder *2-platform*
 
     terraform init -backend-config="platform-dev.config"
     terraform plan -var-file="development.tfvars"
     terraform apply -var-file="development.tfvars"
 
-### 3-TBC 
+### 3-application 
+Supporting commands to build the application layer should be run from the project folder *3-application*
+
+    terraform init -backend-config="application-dev.config"
+    # terraform plan -var-file="development.tfvars"
+    # terraform apply -var-file="development.tfvars"
 
 
