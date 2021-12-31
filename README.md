@@ -1,7 +1,7 @@
 # Infrastructure AWS
 Experimental attempt at provisioning the supporting infrastructure in AWS for Logactaesque using [Terraform](https://www.terraform.io/)
 
-_**As of December 2021 this has been paused in an incomplete state.** Parts 1 and 2 function as expected.
+**As of December 2021 this has been paused in an incomplete state.** Parts 1 and 2 function as expected.
 
 Built using [this Udemy course](https://www.udemy.com/course/deploy-fargate-ecs-apps-infrastructure-aws-with-terraform/) on Fargate/AWS/Terraform
 
